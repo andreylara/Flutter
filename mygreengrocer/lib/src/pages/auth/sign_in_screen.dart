@@ -1,6 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mygreengrocer/src/pages/auth/controller/auth_controller.dart';
 import 'package:mygreengrocer/src/pages/common_widgets/app_name_widget.dart';
 import 'package:mygreengrocer/src/pages/common_widgets/custom_text_field.dart';
 import 'package:mygreengrocer/src/config/custom_colors.dart';
@@ -112,21 +113,36 @@ class SignInScreen extends StatelessWidget {
                       //Botão entrar
                       SizedBox(
                         height: 50,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18),
-                            ),
-                          ),
-                          onPressed: () {
-                            _formKey.currentState!.validate();
+                        child: GetX<AuthController>(
+                          builder: (authController) {
+                            return ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18),
+                                ),
+                              ),
+                              onPressed: authController.isLoading.value
+                                  ? null
+                                  : () {
+                                      FocusScope.of(context).unfocus();
+                                      String email = emailController.text;
+                                      String password = passwordController.text;
+
+                                      if (_formKey.currentState!.validate()) {
+                                        authController.signIn(
+                                            email: email, password: password);
+                                      }
+                                    },
+                              child: authController.isLoading.value
+                                  ? const CircularProgressIndicator()
+                                  : const Text(
+                                      'Entrar',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                            );
                           },
-                          child: const Text(
-                            'Entrar',
-                            style: TextStyle(
-                              fontSize: 18,
-                            ),
-                          ),
                         ),
                       ),
 
