@@ -2,10 +2,12 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mygreengrocer/src/pages/auth/controller/auth_controller.dart';
+import 'package:mygreengrocer/src/pages/auth/view/components/forgot_password_dialog.dart';
 import 'package:mygreengrocer/src/pages/common_widgets/app_name_widget.dart';
 import 'package:mygreengrocer/src/pages/common_widgets/custom_text_field.dart';
 import 'package:mygreengrocer/src/config/custom_colors.dart';
 import 'package:mygreengrocer/src/pages_routes/app_pages.dart';
+import 'package:mygreengrocer/src/services/utils_services.dart';
 import 'package:mygreengrocer/src/services/validators.dart';
 
 class SignInScreen extends StatelessWidget {
@@ -15,6 +17,7 @@ class SignInScreen extends StatelessWidget {
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final utilsServices = UtilsServices();
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +140,22 @@ class SignInScreen extends StatelessWidget {
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            final bool? result = await showDialog(
+                              context: context,
+                              builder: (_) {
+                                return ForgotPasswordDialog(
+                                  email: emailController.text,
+                                );
+                              },
+                            );
+                            if (result ?? false) {
+                              utilsServices.showToast(
+                                message:
+                                    'Um link de recuperação foi enviado para o seu email.',
+                              );
+                            }
+                          },
                           child: Text(
                             'Esqueceu a senha?',
                             style: TextStyle(
