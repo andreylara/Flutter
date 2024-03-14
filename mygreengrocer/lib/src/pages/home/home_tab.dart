@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mygreengrocer/src/config/custom_colors.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:mygreengrocer/src/pages/common_widgets/custom_shimmer.dart';
-import 'package:mygreengrocer/src/pages/home/components/category_tile.dart';
+import 'package:mygreengrocer/src/pages/home/view/components/category_tile.dart';
 import 'package:mygreengrocer/src/config/app_data.dart' as app_data;
-import 'package:mygreengrocer/src/pages/home/components/item_tile.dart';
+import 'package:mygreengrocer/src/pages/home/view/components/item_tile.dart';
+import 'package:mygreengrocer/src/pages/home/controller/home_controller.dart';
 
 import '../common_widgets/app_name_widget.dart';
 
@@ -21,8 +23,9 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+
+    Get.find<HomeController>().printExample();
 
     Future.delayed(
       const Duration(seconds: 3),
