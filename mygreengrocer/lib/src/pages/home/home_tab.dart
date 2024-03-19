@@ -99,7 +99,7 @@ class _HomeTabState extends State<HomeTab> {
           GetBuilder<HomeController>(
             builder: (controller) {
               return Container(
-                padding: const EdgeInsets.only(left: 25),
+                padding: const EdgeInsets.only(left: 25, right: 25),
                 height: 40,
                 child: !controller.isLoading
                     ? ListView.separated(
