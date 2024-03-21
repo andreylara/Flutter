@@ -5,7 +5,7 @@ import 'package:mygreengrocer/src/pages/common_widgets/quantity_widget.dart';
 import 'package:mygreengrocer/src/services/utils_services.dart';
 
 class ProductScreen extends StatefulWidget {
-  ProductScreen({
+  const ProductScreen({
     super.key,
     required this.item,
   });
@@ -98,7 +98,7 @@ class _ProductScreenState extends State<ProductScreen> {
                           ),
                           child: SingleChildScrollView(
                             child: Text(
-                              widget.item.description,
+                              widget.item.description ?? "",
                               style: const TextStyle(
                                 height: 1.5,
                               ),
