@@ -17,10 +17,7 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
-  @override
-  void initState() {
-    super.initState();
-  }
+  final searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -63,35 +60,57 @@ class _HomeTabState extends State<HomeTab> {
       body: Column(
         children: [
           //Campo pesquisa
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 10,
-            ),
-            child: TextFormField(
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                isDense: true,
-                hintText: 'Pesquise aqui...',
-                hintStyle: TextStyle(
-                  color: Colors.grey.shade400,
-                  fontSize: 14,
+          GetBuilder<HomeController>(
+            builder: (controller) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
                 ),
-                prefixIcon: Icon(
-                  Icons.search,
-                  color: CustomColors.customConstrastColor,
-                  size: 21,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(60),
-                  borderSide: const BorderSide(
-                    width: 0,
-                    style: BorderStyle.none,
+                child: TextFormField(
+                  controller: searchController,
+                  onChanged: (value) {
+                    controller.searchTitle.value = value;
+                  },
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    isDense: true,
+                    hintText: 'Pesquise aqui...',
+                    hintStyle: TextStyle(
+                      color: Colors.grey.shade400,
+                      fontSize: 14,
+                    ),
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: CustomColors.customConstrastColor,
+                      size: 21,
+                    ),
+                    suffixIcon: controller.searchTitle.value.isNotEmpty
+                        ? IconButton(
+                            onPressed: () {
+                              searchController.clear();
+                              controller.searchTitle.value = '';
+                              FocusScope.of(context).unfocus();
+                            },
+                            icon: Icon(
+                              Icons.close,
+                              color: CustomColors.customConstrastColor,
+                              size: 21,
+                            ),
+                          )
+                        : null,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(60),
+                      borderSide: const BorderSide(
+                        width: 0,
+                        style: BorderStyle.none,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
 
           //Categorias
@@ -142,27 +161,42 @@ class _HomeTabState extends State<HomeTab> {
             builder: (controller) {
               return Expanded(
                 child: !controller.isProductLoading
-                    ? GridView.builder(
-                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                        physics: const BouncingScrollPhysics(),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 10,
-                          crossAxisSpacing: 10,
-                          childAspectRatio: 9 / 11.5,
+                    ? Visibility(
+                        visible: (controller.currencyCategory!.items ?? [])
+                            .isNotEmpty,
+                        replacement: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.search_off,
+                              size: 40,
+                              color: CustomColors.customSwatchColor,
+                            ),
+                            const Text('Não há itens para apresentar'),
+                          ],
                         ),
-                        itemCount: controller.allProducts.length,
-                        itemBuilder: (_, index) {
-                          if ((index + 1) == controller.allProducts.length &&
-                              !controller.isLastPage) {
-                            controller.loadMoreProducts();
-                          }
+                        child: GridView.builder(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                          physics: const BouncingScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 10,
+                            childAspectRatio: 9 / 11.5,
+                          ),
+                          itemCount: controller.allProducts.length,
+                          itemBuilder: (_, index) {
+                            if ((index + 1) == controller.allProducts.length &&
+                                !controller.isLastPage) {
+                              controller.loadMoreProducts();
+                            }
 
-                          return ItemTile(
-                            item: controller.allProducts[index],
-                          );
-                        },
+                            return ItemTile(
+                              item: controller.allProducts[index],
+                            );
+                          },
+                        ),
                       )
                     : GridView.count(
                         padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),

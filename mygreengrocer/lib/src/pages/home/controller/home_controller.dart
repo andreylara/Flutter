@@ -19,6 +19,8 @@ class HomeController extends GetxController {
   CategoryModel? currencyCategory;
   List<ItemModel> get allProducts => currencyCategory?.items ?? [];
 
+  RxString searchTitle = ''.obs;
+
   bool get isLastPage {
     if (currencyCategory!.items.length < itemsPerPage) return true;
     return currencyCategory!.pagination * itemsPerPage > allProducts.length;
@@ -37,6 +39,12 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
 
+    debounce(
+      searchTitle,
+      (_) => filterByTitle(),
+      time: const Duration(milliseconds: 600),
+    );
+
     getAllCategories();
   }
 
@@ -44,7 +52,7 @@ class HomeController extends GetxController {
     currencyCategory = category;
     update();
 
-    //if (currencyCategory!.items.isNotEmpty) return;
+    if (currencyCategory!.items.isNotEmpty) return;
 
     getAllProducts();
   }
@@ -74,6 +82,39 @@ class HomeController extends GetxController {
     );
   }
 
+  void filterByTitle() {
+    for (var category in allCategories) {
+      category.items.clear();
+      category.pagination = 0;
+    }
+
+    if (searchTitle.value.isEmpty) {
+      allCategories.removeAt(0);
+    } else {
+      CategoryModel? c = allCategories.firstWhereOrNull((cat) => cat.id == '');
+
+      if (c == null) {
+        //Criar nova categoria todos
+        final allProductsCategory = CategoryModel(
+          title: 'Todos',
+          id: '',
+          items: [],
+          pagination: 0,
+        );
+        allCategories.insert(0, allProductsCategory);
+      } else {
+        c.items.clear();
+        c.pagination = 0;
+      }
+    }
+
+    currencyCategory = allCategories.first;
+
+    update();
+
+    getAllProducts();
+  }
+
   void loadMoreProducts() {
     currencyCategory!.pagination++;
 
@@ -89,8 +130,15 @@ class HomeController extends GetxController {
       'page': currencyCategory!.pagination,
       'categoryId': currencyCategory!.id,
       'itemsPerPage': itemsPerPage,
-      'title': null
     };
+
+    if (searchTitle.value.isNotEmpty) {
+      body['title'] = searchTitle.value;
+
+      if (currencyCategory!.id == '') {
+        body.remove('categoryId');
+      }
+    }
 
     HomeResult<ItemModel> homeResult =
         await homeRepository.getAllProducts(body);
