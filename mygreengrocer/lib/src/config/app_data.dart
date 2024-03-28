@@ -1,4 +1,3 @@
-import 'package:mygreengrocer/src/models/cart_item_model.dart';
 import 'package:mygreengrocer/src/models/item_model.dart';
 import 'package:mygreengrocer/src/models/user_model.dart';
 
@@ -68,21 +67,6 @@ List<ItemModel> items = [
   papaya,
 ];
 
-List<CartItemModel> cartItems = [
-  CartItemModel(
-    item: apple,
-    quantity: 2,
-  ),
-  CartItemModel(
-    item: mango,
-    quantity: 1,
-  ),
-  CartItemModel(
-    item: guava,
-    quantity: 3,
-  ),
-];
-
 UserModel user = UserModel(
   name: 'Andrey Lara',
   email: 'andreydelara@hotmail.com',
@@ -104,16 +88,7 @@ List<OrderModel> orders = [
     id: 'asd6a54da6s2d1',
     status: 'pending_payment',
     total: 11.0,
-    items: [
-      CartItemModel(
-        item: apple,
-        quantity: 2,
-      ),
-      CartItemModel(
-        item: mango,
-        quantity: 5,
-      ),
-    ],
+    items: [],
   ),
   //Pedido 2
   OrderModel(
@@ -127,11 +102,6 @@ List<OrderModel> orders = [
     id: 'asd6a54da6s2d1',
     status: 'delivered',
     total: 11.5,
-    items: [
-      CartItemModel(
-        item: guava,
-        quantity: 1,
-      ),
-    ],
+    items: [],
   )
 ];
