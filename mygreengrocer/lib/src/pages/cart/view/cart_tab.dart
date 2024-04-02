@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mygreengrocer/src/config/custom_colors.dart';
 import 'package:mygreengrocer/src/pages/cart/controller/cart_controller.dart';
-import 'package:mygreengrocer/src/pages/common_widgets/payment_dialog.dart';
 import 'package:mygreengrocer/src/services/utils_services.dart';
-import 'package:mygreengrocer/src/config/app_data.dart' as appData;
 import 'package:get/get.dart';
 
 import 'components/cart_tile.dart';
@@ -17,6 +15,7 @@ class CarTab extends StatefulWidget {
 
 class _CarTabState extends State<CarTab> {
   final UtilsServices utilsServices = UtilsServices();
+  final cartController = Get.find<CartController>();
 
   double cartTotalPrice() {
     //double total = 0;
@@ -103,35 +102,35 @@ class _CarTabState extends State<CarTab> {
                 ),
                 SizedBox(
                   height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: CustomColors.customSwatchColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                    ),
-                    onPressed: () async {
-                      bool? result = await showOrderConfirmation();
+                  child: GetBuilder<CartController>(
+                    builder: (controller) {
+                      return ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: CustomColors.customSwatchColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                        ),
+                        onPressed: controller.isCheckoutLoading
+                            ? null
+                            : () async {
+                                bool? result = await showOrderConfirmation();
 
-                      if (result ?? false) {
-                        // ignore: use_build_context_synchronously
-                        showDialog(
-                          context: context,
-                          builder: (_) {
-                            return PaymentDialog(
-                              order: appData.orders.first,
-                            );
-                          },
-                        );
-                      } else {
-                        utilsServices.showToast(
-                            message: 'Pedido não confirmado');
-                      }
+                                if (result ?? false) {
+                                  cartController.checkoutCart();
+                                } else {
+                                  utilsServices.showToast(
+                                      message: 'Pedido não confirmado');
+                                }
+                              },
+                        child: controller.isCheckoutLoading
+                            ? const CircularProgressIndicator()
+                            : const Text(
+                                'Concluir pedido',
+                                style: TextStyle(fontSize: 18),
+                              ),
+                      );
                     },
-                    child: const Text(
-                      'Concluir pedido',
-                      style: TextStyle(fontSize: 18),
-                    ),
                   ),
                 )
               ],

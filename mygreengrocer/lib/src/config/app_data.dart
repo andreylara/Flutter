@@ -75,33 +75,4 @@ UserModel user = UserModel(
   password: '',
 );
 
-List<OrderModel> orders = [
-  //Pedido 1
-  OrderModel(
-    copyAndPaste: 'q1w2e3r4t5y6',
-    createdDateTime: DateTime.parse(
-      '2023-07-25 10:00:10.458',
-    ),
-    overdueDateTime: DateTime.parse(
-      '2024-07-25 10:00:10.458',
-    ),
-    id: 'asd6a54da6s2d1',
-    status: 'pending_payment',
-    total: 11.0,
-    items: [],
-  ),
-  //Pedido 2
-  OrderModel(
-    copyAndPaste: 'q1w2e3r4t5y6',
-    createdDateTime: DateTime.parse(
-      '2023-08-08 10:00:10.458',
-    ),
-    overdueDateTime: DateTime.parse(
-      '2023-08-25 10:00:10.458',
-    ),
-    id: 'asd6a54da6s2d1',
-    status: 'delivered',
-    total: 11.5,
-    items: [],
-  )
-];
+List<OrderModel> orders = [];
