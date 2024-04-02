@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mygreengrocer/src/config/custom_colors.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:mygreengrocer/src/pages/base/controller/navigation_controller.dart';
+import 'package:mygreengrocer/src/pages/cart/controller/cart_controller.dart';
 import 'package:mygreengrocer/src/pages/common_widgets/custom_shimmer.dart';
 import 'package:mygreengrocer/src/pages/home/controller/home_controller.dart';
 import 'package:mygreengrocer/src/pages/home/view/components/category_tile.dart';
@@ -18,6 +20,7 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> {
   final searchController = TextEditingController();
+  final navigationController = Get.find<NavigationController>();
 
   @override
   Widget build(BuildContext context) {
@@ -34,24 +37,30 @@ class _HomeTabState extends State<HomeTab> {
               top: 18,
               right: 15,
             ),
-            child: GestureDetector(
-              onTap: () {},
-              child: badges.Badge(
-                badgeContent: const Text(
-                  '2',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
+            child: GetBuilder<CartController>(
+              builder: (controller) {
+                return GestureDetector(
+                  onTap: () {
+                    navigationController.navigatePageView(NavigationTabs.cart);
+                  },
+                  child: badges.Badge(
+                    badgeContent: Text(
+                      controller.cartItems.length.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
+                    ),
+                    badgeStyle: badges.BadgeStyle(
+                      badgeColor: CustomColors.customConstrastColor,
+                    ),
+                    child: Icon(
+                      Icons.shopping_cart,
+                      color: CustomColors.customSwatchColor,
+                    ),
                   ),
-                ),
-                badgeStyle: badges.BadgeStyle(
-                  badgeColor: CustomColors.customConstrastColor,
-                ),
-                child: Icon(
-                  Icons.shopping_cart,
-                  color: CustomColors.customSwatchColor,
-                ),
-              ),
+                );
+              },
             ),
           )
         ],
@@ -162,8 +171,8 @@ class _HomeTabState extends State<HomeTab> {
               return Expanded(
                 child: !controller.isProductLoading
                     ? Visibility(
-                        visible: (controller.currencyCategory!.items ?? [])
-                            .isNotEmpty,
+                        visible:
+                            (controller.currencyCategory!.items).isNotEmpty,
                         replacement: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
