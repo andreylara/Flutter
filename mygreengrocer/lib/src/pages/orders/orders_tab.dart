@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mygreengrocer/src/pages/orders/controller/orders_controller.dart';
+import 'package:mygreengrocer/src/pages/orders/controller/all_orders_controller.dart';
 import 'package:mygreengrocer/src/pages/orders/view/components/order_tile.dart';
 
 class OrdersTab extends StatelessWidget {
