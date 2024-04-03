@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mygreengrocer/src/pages/auth/controller/auth_controller.dart';
 import 'package:mygreengrocer/src/pages/common_widgets/custom_text_field.dart';
-import 'package:mygreengrocer/src/config/app_data.dart' as appData;
+import 'package:mygreengrocer/src/services/validators.dart';
 
 class ProfileTab extends StatefulWidget {
   const ProfileTab({super.key});
@@ -37,7 +37,7 @@ class _ProfileTabState extends State<ProfileTab> {
           //Email
           CustomTextField(
             readOnly: true,
-            initialValue: appData.user.email,
+            initialValue: authController.user.email,
             icon: Icons.email,
             label: 'Email',
           ),
@@ -45,7 +45,7 @@ class _ProfileTabState extends State<ProfileTab> {
           //Nome
           CustomTextField(
             readOnly: true,
-            initialValue: appData.user.name,
+            initialValue: authController.user.name,
             icon: Icons.person,
             label: 'Nome',
           ),
@@ -53,7 +53,7 @@ class _ProfileTabState extends State<ProfileTab> {
           //Celular
           CustomTextField(
             readOnly: true,
-            initialValue: appData.user.phone,
+            initialValue: authController.user.phone,
             icon: Icons.phone,
             label: 'Celular',
           ),
@@ -61,7 +61,7 @@ class _ProfileTabState extends State<ProfileTab> {
           //CPF
           CustomTextField(
             readOnly: true,
-            initialValue: appData.user.cpf,
+            initialValue: authController.user.cpf,
             icon: Icons.file_copy,
             label: 'CPF',
             isSecret: true,
@@ -80,7 +80,7 @@ class _ProfileTabState extends State<ProfileTab> {
                 ),
               ),
               onPressed: () {
-                updatePAssword();
+                updatePassword();
               },
               child: const Text('Atualizar senha'),
             ),
@@ -90,7 +90,11 @@ class _ProfileTabState extends State<ProfileTab> {
     );
   }
 
-  Future<bool?> updatePAssword() {
+  Future<bool?> updatePassword() {
+    final currentPasswordController = TextEditingController();
+    final newPasswordController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+
     return showDialog(
       context: context,
       builder: (context) {
@@ -102,55 +106,88 @@ class _ProfileTabState extends State<ProfileTab> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Titulo
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      child: Text(
-                        'Atualiação de senha',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    // Senha atual
-                    const CustomTextField(
-                      isSecret: true,
-                      icon: Icons.lock,
-                      label: 'Senha atual',
-                    ),
-                    // Nova senha
-                    const CustomTextField(
-                      isSecret: true,
-                      icon: Icons.lock,
-                      label: 'Nova senha',
-                    ),
-                    // Confirmar nova senha
-                    const CustomTextField(
-                      isSecret: true,
-                      icon: Icons.lock,
-                      label: 'Confirmar nova senha',
-                    ),
-
-                    // Botão de confirmação
-                    SizedBox(
-                      height: 45,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Titulo
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        child: Text(
+                          'Atualiação de senha',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        onPressed: () {},
-                        child: const Text('Atualizar'),
                       ),
-                    )
-                  ],
+                      // Senha atual
+                      CustomTextField(
+                        controller: currentPasswordController,
+                        isSecret: true,
+                        icon: Icons.lock,
+                        label: 'Senha atual',
+                        validator: passwordValidator,
+                      ),
+                      // Nova senha
+                      CustomTextField(
+                        controller: newPasswordController,
+                        isSecret: true,
+                        icon: Icons.lock,
+                        label: 'Nova senha',
+                        validator: passwordValidator,
+                      ),
+                      // Confirmar nova senha
+                      CustomTextField(
+                        isSecret: true,
+                        icon: Icons.lock,
+                        label: 'Confirmar nova senha',
+                        validator: (password) {
+                          final result = passwordValidator(password);
+                          if (result != null) {
+                            return result;
+                          }
+
+                          if (password == newPasswordController.text) {
+                            return 'As senhas não são equivalentes';
+                          }
+
+                          return null;
+                        },
+                      ),
+
+                      // Botão de confirmação
+                      SizedBox(
+                        height: 45,
+                        child: Obx(
+                          () => ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                            onPressed: authController.isLoading.value
+                                ? null
+                                : () {
+                                    if (formKey.currentState!.validate()) {
+                                      authController.changePassword(
+                                        currentPassword:
+                                            currentPasswordController.text,
+                                        newPassword: newPasswordController.text,
+                                      );
+                                    }
+                                  },
+                            child: authController.isLoading.value
+                                ? const CircularProgressIndicator()
+                                : const Text('Atualizar'),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
               Positioned(
