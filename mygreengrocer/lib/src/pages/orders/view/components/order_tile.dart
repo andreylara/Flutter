@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mygreengrocer/src/models/cart_item_model.dart';
 import 'package:mygreengrocer/src/models/order_model.dart';
 import 'package:mygreengrocer/src/pages/common_widgets/payment_dialog.dart';
-import 'package:mygreengrocer/src/pages/orders/components/order_status_widget.dart';
+import 'package:mygreengrocer/src/pages/orders/view/components/order_status_widget.dart';
 import 'package:mygreengrocer/src/services/utils_services.dart';
 
 class OrderTile extends StatelessWidget {
@@ -72,8 +72,9 @@ class OrderTile extends StatelessWidget {
                   Expanded(
                     flex: 2,
                     child: OrdderStatusWidget(
-                      status: order.status,
-                      isOverdue: order.overdueDateTime.isBefore(DateTime.now()),
+                      status: order.status!,
+                      isOverdue:
+                          order.overdueDateTime!.isBefore(DateTime.now()),
                     ),
                   ),
                 ],
