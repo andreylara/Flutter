@@ -135,7 +135,7 @@ class _CarTabState extends State<CarTab> {
                 )
               ],
             ),
-          )
+          ),
         ],
       ),
     );

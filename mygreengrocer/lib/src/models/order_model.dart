@@ -12,28 +12,15 @@ class OrderModel {
   @JsonKey(name: 'createdAt')
   DateTime? createdDateTime;
 
-  @JsonKey(name: 'due')
-  DateTime overdueDateTime;
-
   @JsonKey(defaultValue: [])
   List<CartItemModel> items;
-  String status;
-  String qrCodeImage;
 
-  @JsonKey(name: 'copiaecola')
-  String copyAndPaste;
   double total;
-
-  bool get isOverDue => overdueDateTime.isBefore(DateTime.now());
 
   OrderModel({
     required this.id,
     this.createdDateTime,
-    required this.overdueDateTime,
     required this.items,
-    required this.status,
-    required this.qrCodeImage,
-    required this.copyAndPaste,
     required this.total,
   });
 

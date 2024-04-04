@@ -3,10 +3,7 @@ import 'package:get/get.dart';
 import 'package:mygreengrocer/src/models/cart_item_model.dart';
 import 'package:mygreengrocer/src/models/order_model.dart';
 import 'package:mygreengrocer/src/pages/orders/controller/order_controller.dart';
-import 'package:mygreengrocer/src/pages/orders/view/components/order_status_widget.dart';
 import 'package:mygreengrocer/src/services/utils_services.dart';
-
-import '../../../common_widgets/payment_dialog.dart';
 
 class OrderTile extends StatelessWidget {
   final OrderModel order;
@@ -82,68 +79,30 @@ class OrderTile extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            // Divisoria
-                            VerticalDivider(
-                              color: Colors.grey.shade300,
-                              thickness: 2,
-                              width: 8,
-                            ),
-                            // Status do pedido
-                            Expanded(
-                              flex: 2,
-                              child: OrdderStatusWidget(
-                                status: order.status,
-                                isOverdue: order.overdueDateTime
-                                    .isBefore(DateTime.now()),
-                              ),
-                            ),
                           ],
                         ),
                       ),
                       // Total
-                      Text.rich(
-                        TextSpan(
-                          style: const TextStyle(
-                            fontSize: 20,
-                          ),
-                          children: [
-                            const TextSpan(
-                              text: 'Total ',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Text.rich(
+                          TextSpan(
+                            style: const TextStyle(
+                              fontSize: 20,
+                            ),
+                            children: [
+                              const TextSpan(
+                                text: 'Total ',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            TextSpan(
-                              text: utilsServices.priceToCurrency(order.total),
-                            ),
-                          ],
-                        ),
-                      ),
-                      // Botão Pagamento
-                      Visibility(
-                        visible: order.status == 'pending_payment' &&
-                            !order.isOverDue,
-                        child: ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
+                              TextSpan(
+                                text:
+                                    utilsServices.priceToCurrency(order.total),
+                              ),
+                            ],
                           ),
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (_) {
-                                return PaymentDialog(
-                                  order: order,
-                                );
-                              },
-                            );
-                          },
-                          icon: Image.asset(
-                            'assets/app_images/pix.png',
-                            height: 18,
-                          ),
-                          label: const Text('Ver QR Code Pix'),
                         ),
                       ),
                     ],

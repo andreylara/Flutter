@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mygreengrocer/src/models/cart_item_model.dart';
 import 'package:mygreengrocer/src/models/order_model.dart';
@@ -8,7 +7,6 @@ import 'package:mygreengrocer/src/pages/cart/result/cart_result.dart';
 import 'package:mygreengrocer/src/services/utils_services.dart';
 
 import '../../../models/item_model.dart';
-import '../../common_widgets/payment_dialog.dart';
 
 class CartController extends GetxController {
   final cartRepository = CartRepository();
@@ -53,15 +51,6 @@ class CartController extends GetxController {
       sucess: (order) {
         cartItems.clear();
         update();
-
-        showDialog(
-          context: Get.context!,
-          builder: (_) {
-            return PaymentDialog(
-              order: order,
-            );
-          },
-        );
       },
       error: (message) {
         utilsServices.showToast(
