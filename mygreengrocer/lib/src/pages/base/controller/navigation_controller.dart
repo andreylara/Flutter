@@ -34,7 +34,7 @@ class NavigationController extends GetxController {
   }
 
   void navigatePageView(int page) {
-    if (_currencyIndex == page) return;
+    if (_currencyIndex.toInt() == page) return;
 
     _pageController.jumpToPage(page);
     _currencyIndex.value = page;
