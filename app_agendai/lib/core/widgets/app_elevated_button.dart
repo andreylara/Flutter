@@ -22,32 +22,32 @@ class AppElevatedButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ButtonStyle(
-        backgroundColor: MaterialStateColor.resolveWith((states) {
-          if (states.contains(MaterialState.disabled)) {
+        backgroundColor: WidgetStateColor.resolveWith((states) {
+          if (states.contains(WidgetState.disabled)) {
             return t.gray;
           }
           return t.primary;
         }),
-        shape: MaterialStateProperty.all(
+        shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18),
           ),
         ),
-        minimumSize: MaterialStateProperty.all(const Size(128, 64)),
-        textStyle: MaterialStateProperty.all(
+        minimumSize: WidgetStateProperty.all(const Size(128, 64)),
+        textStyle: WidgetStateProperty.all(
           const TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w700,
           ),
         ),
-        foregroundColor: MaterialStateColor.resolveWith((states) {
-          if (states.contains(MaterialState.disabled)) {
+        foregroundColor: WidgetStateColor.resolveWith((states) {
+          if (states.contains(WidgetState.disabled)) {
             return t.lightGray;
           }
           return Colors.white;
         }),
-        elevation: MaterialStateProperty.all(0),
-        padding: MaterialStateProperty.all(
+        elevation: WidgetStateProperty.all(0),
+        padding: WidgetStateProperty.all(
           const EdgeInsets.symmetric(horizontal: 16),
         ),
       ),

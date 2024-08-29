@@ -1,14 +1,24 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class AppSecureStorage {
+enum AppSecureStorageKeys { sessionToken }
 
+class AppSecureStorage {
   AppSecureStorage(this._secureStorage);
 
   final FlutterSecureStorage _secureStorage;
 
   Future<String?> getSessionToken() {
-    return Future.value('r:d61add6fdca2bc7c9a58c32e0484a746');
-    return _secureStorage.read(key: 'sessionToken');
+    return _secureStorage.read(key: AppSecureStorageKeys.sessionToken.name);
   }
 
+  Future<void> saveSessionToken(String token) {
+    return _secureStorage.write(
+      key: AppSecureStorageKeys.sessionToken.name,
+      value: token,
+    );
+  }
+
+  Future<void> deleteSessionToken() {
+    return _secureStorage.delete(key: AppSecureStorageKeys.sessionToken.name);
+  }
 }

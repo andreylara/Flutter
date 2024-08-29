@@ -1,6 +1,8 @@
 import 'package:app_agendai/core/helpers/result.dart';
 import 'package:app_agendai/features/auth/data/results/login_failed.dart';
+import 'package:app_agendai/features/auth/data/results/sign_up_failed.dart';
 import 'package:app_agendai/features/auth/data/results/validate_token_failed.dart';
+import 'package:app_agendai/features/auth/models/sign_up_dto.dart';
 import 'package:app_agendai/features/auth/models/user.dart';
 import 'package:dio/dio.dart';
 
@@ -9,6 +11,8 @@ abstract class AuthDatasource {
       {required String email, required String password});
 
   Future<Result<ValidateTokenFailed, User>> validateToken(String token);
+
+  Future<Result<SignUpFailed, User>> signUp(SignUpDto signUpDto);
 }
 
 class RemoteAuthDatasource implements AuthDatasource {
@@ -20,12 +24,12 @@ class RemoteAuthDatasource implements AuthDatasource {
   Future<Result<LoginFailed, User>> login(
       {required String email, required String password}) async {
     try {
-      final response = await _dio.post('/v1-sign-in', data: {
+      final response = await _dio.post('/sign-in', data: {
         'email': email,
         'password': password,
       });
 
-      return Success(User.fromMap(response.data['result']));
+      return Success(User.fromJson(response.data['result']));
     } on DioException catch (e) {
       if (e.type == DioExceptionType.unknown) {
         return const Failure(LoginFailed.offline);
@@ -39,10 +43,21 @@ class RemoteAuthDatasource implements AuthDatasource {
   }
 
   @override
+  Future<Result<SignUpFailed, User>> signUp(SignUpDto signUpDto) async {
+    try {
+      final response = await _dio.post('/sign-up', data: signUpDto.toJson());
+
+      return Success(User.fromJson(response.data['result']));
+    } catch (_) {
+      return const Failure(SignUpFailed.unknownError);
+    }
+  }
+
+  @override
   Future<Result<ValidateTokenFailed, User>> validateToken(String token) async {
     try {
       final response = await _dio.post(
-        '/v1-get-user',
+        '/get-user',
         options: Options(
           headers: {
             'x-parse-session-token': token,
@@ -50,7 +65,7 @@ class RemoteAuthDatasource implements AuthDatasource {
         ),
       );
 
-      return Success(User.fromMap(response.data['result']));
+      return Success(User.fromJson(response.data['result']));
     } on DioException {
       return const Failure(ValidateTokenFailed.invalidToken);
     } catch (_) {

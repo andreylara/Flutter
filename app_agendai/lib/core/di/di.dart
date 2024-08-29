@@ -1,3 +1,6 @@
+import 'package:app_agendai/core/device/app_device_settings.dart';
+import 'package:app_agendai/core/device/app_external_launcher.dart';
+import 'package:app_agendai/core/device/app_location.dart';
 import 'package:app_agendai/core/device/app_package_info.dart';
 import 'package:app_agendai/core/device/app_preferences.dart';
 import 'package:app_agendai/core/device/app_secure_storage.dart';
@@ -6,8 +9,12 @@ import 'package:app_agendai/core/firebase/messaging/app_messaging.dart';
 import 'package:app_agendai/core/firebase/remote_config/app_remote_config.dart';
 import 'package:app_agendai/core/flavor/flavor_config.dart';
 import 'package:app_agendai/core/helpers/token_interceptor.dart';
+import 'package:app_agendai/core/widgets/alert/alert_area_cubit.dart';
 import 'package:app_agendai/features/auth/data/auth_datasource.dart';
 import 'package:app_agendai/features/auth/data/auth_repository.dart';
+import 'package:app_agendai/features/auth/data/session/session_cubit.dart';
+import 'package:app_agendai/features/scheduling/data/scheduling_datasource.dart';
+import 'package:app_agendai/features/scheduling/data/scheduling_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -43,8 +50,13 @@ Future<void> configureDependencies(FlavorConfig config) async {
   getIt.registerFactory(() => const FlutterSecureStorage());
   getIt.registerFactory(() => AppSecureStorage(getIt()));
 
+  getIt.registerLazySingleton(() => AlertAreaCubit());
+
   getIt.registerFactory<AuthDatasource>(() => RemoteAuthDatasource(getIt()));
   getIt.registerLazySingleton(() => AuthRepository(getIt(), getIt()));
+
+  getIt.registerFactory(() => SchedulingDatasource(getIt()));
+  getIt.registerLazySingleton(() => SchedulingRepository(getIt()));
 
   getIt.registerLazySingleton(() => FirebaseCrashlytics.instance);
   getIt.registerSingleton(AppCrashlytics(getIt()));
@@ -56,4 +68,9 @@ Future<void> configureDependencies(FlavorConfig config) async {
   getIt.registerSingleton(AppRemoteConfig(getIt()));
 
   getIt.registerFactory(() => AppPackageInfo());
+  getIt.registerFactory(() => AppLocation());
+  getIt.registerFactory(() => AppDeviceSettings());
+  getIt.registerFactory(() => AppExternalLauncher());
+
+  getIt.registerSingleton(SessionCubit());
 }

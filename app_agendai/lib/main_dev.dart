@@ -1,5 +1,5 @@
-import 'package:app_agendamento/app.dart';
-import 'package:app_agendamento/core/flavor/flavor_config.dart';
+import 'package:app_agendai/app.dart';
+import 'package:app_agendai/core/flavor/flavor_config.dart';
 
 void main() {
   bootstrap(

@@ -1,12 +1,10 @@
-import 'package:app_agendamento/core/device/app_package_info.dart';
-import 'package:app_agendamento/core/device/app_preferences.dart';
-import 'package:app_agendamento/core/di/di.dart';
-import 'package:app_agendamento/core/firebase/remote_config/app_remote_config.dart';
-import 'package:app_agendamento/core/helpers/result.dart';
-import 'package:app_agendamento/features/auth/data/auth_repository.dart';
-import 'package:app_agendamento/features/auth/data/results/validate_token_failed.dart';
-import 'package:app_agendamento/features/auth/models/user.dart';
-import 'package:app_agendamento/features/intro/pages/splash/splash_page_actions.dart';
+import 'package:app_agendai/core/device/app_package_info.dart';
+import 'package:app_agendai/core/device/app_preferences.dart';
+import 'package:app_agendai/core/di/di.dart';
+import 'package:app_agendai/core/firebase/remote_config/app_remote_config.dart';
+import 'package:app_agendai/core/helpers/result.dart';
+import 'package:app_agendai/features/auth/data/auth_repository.dart';
+import 'package:app_agendai/features/intro/pages/splash/splash_page_actions.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -82,7 +80,6 @@ class SplashPageCubit extends Cubit<SplashPageState> {
 
   Future<bool> _checkLoggedUser() async {
     final result = await _authRepository.validateToken();
-    print(result);
     return result is Success;
   }
 

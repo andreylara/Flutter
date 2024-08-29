@@ -50,20 +50,21 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCgd064OdleOV-T_Q4OaaKuMvNayexiZUs',
-    appId: '1:211935330684:android:fc37edaf3d9077c094e4f9',
-    messagingSenderId: '211935330684',
-    projectId: 'app-agendamento-142c2',
-    storageBucket: 'app-agendamento-142c2.appspot.com',
+    apiKey: 'AIzaSyCGe_ZHk1wv3p9SieRSKTrlC_KsjHRmVXA',
+    appId: '1:762969062291:android:6d618b2a09e9723913c666',
+    messagingSenderId: '762969062291',
+    projectId: 'app-agendai-4002a',
+    storageBucket: 'app-agendai-4002a.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAoXE0xgGMUqsbToiHvrA-H6YGzLqMlhpE',
-    appId: '1:211935330684:ios:19558602cfc3949694e4f9',
+    apiKey: 'AIzaSyDeM9HjxWar7Wqwx7yKrDBKYDOI-In3BlM',
+    appId: '1:762969062291:ios:2f0dd12514c75a1713c666',
     messagingSenderId: '211935330684',
-    projectId: 'app-agendamento-142c2',
-    storageBucket: 'app-agendamento-142c2.appspot.com',
-    iosClientId: '211935330684-ho79r31hsslbr0o5ql19esh0h3qju9i1.apps.googleusercontent.com',
-    iosBundleId: 'dev.startto.appAgendamento',
+    projectId: 'app-agendai-4002a',
+    storageBucket: 'app-agendai-4002a.appspot.com',
+    iosClientId:
+        '211935330684-ho79r31hsslbr0o5ql19esh0h3qju9i1.apps.googleusercontent.com',
+    iosBundleId: 'com.example.appAgendai',
   );
 }

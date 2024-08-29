@@ -7,10 +7,12 @@ class AppTextButton extends StatelessWidget {
     super.key,
     required this.label,
     required this.onPressed,
+    this.color,
   });
 
   final String label;
   final VoidCallback? onPressed;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -18,23 +20,23 @@ class AppTextButton extends StatelessWidget {
 
     return TextButton(
       style: ButtonStyle(
-        foregroundColor: MaterialStateColor.resolveWith((states) {
-          if (states.contains(MaterialState.disabled)) {
+        foregroundColor: WidgetStateColor.resolveWith((states) {
+          if (states.contains(WidgetState.disabled)) {
             return t.lightGray;
           }
-          return t.black;
+          return color ?? t.black;
         }),
-        minimumSize: MaterialStateProperty.all(const Size(64, 64)),
-        shape: MaterialStateProperty.all(
+        minimumSize: WidgetStateProperty.all(const Size(64, 64)),
+        shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18),
           ),
         ),
-        padding: MaterialStateProperty.all(
+        padding: WidgetStateProperty.all(
           const EdgeInsets.symmetric(horizontal: 16),
         ),
-        overlayColor: MaterialStateProperty.all(t.lightGray),
-        textStyle: MaterialStateProperty.all(
+        overlayColor: WidgetStateProperty.all(t.lightGray),
+        textStyle: WidgetStateProperty.all(
           const TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w700,

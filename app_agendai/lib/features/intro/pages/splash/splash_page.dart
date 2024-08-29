@@ -6,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 class SplashPage extends StatefulWidget {
-  const SplashPage({Key? key}) : super(key: key);
+  const SplashPage({super.key});
 
   @override
   State<SplashPage> createState() => _SplashPageState();
@@ -57,7 +57,7 @@ class _SplashPageState extends State<SplashPage> implements SplashPageActions {
 
   @override
   void navToMaintenance() {
-    context.go('/maintenance');
+    context.go(AppRoutes.maintenance);
   }
 
   @override
@@ -67,22 +67,23 @@ class _SplashPageState extends State<SplashPage> implements SplashPageActions {
 
   @override
   void navToAuth() {
-    context.go('/auth');
+    context.go(AppRoutes.auth);
   }
 
   @override
   void navToHome() {
-    //context.go('/home');
+    context.go(AppRoutes.home);
   }
 
   @override
   void navForceUpdate() {
-    context.go('/force-update');
+    context.go(AppRoutes.forceUpdate);
   }
 
   @override
   void dispose() {
     cubit.dispose();
+    cubit.close();
     super.dispose();
   }
 }
