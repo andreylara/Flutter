@@ -1,32 +1,37 @@
 import 'package:app_agendai/core/theme/app_theme.dart';
+import 'package:app_agendai/core/widgets/base/app_stateless.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class AppElevatedButton extends StatelessWidget {
+class AppElevatedButton extends AppStateless {
   const AppElevatedButton({
     super.key,
     required this.label,
     required this.onPressed,
     this.iconPath,
+    required this.id,
   });
 
+  final String id;
   final String label;
   final VoidCallback? onPressed;
   final String? iconPath;
 
   @override
-  Widget build(BuildContext context) {
-    final AppTheme t = context.watch();
-
+  Widget builder(BuildContext context, AppTheme theme) {
     return ElevatedButton(
-      onPressed: onPressed,
+      onPressed: onPressed != null
+          ? () {
+              onPressed!.call();
+              analytics.logButtonPressed(id);
+            }
+          : null,
       style: ButtonStyle(
         backgroundColor: WidgetStateColor.resolveWith((states) {
           if (states.contains(WidgetState.disabled)) {
-            return t.gray;
+            return theme.gray;
           }
-          return t.primary;
+          return theme.primary;
         }),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
@@ -40,9 +45,9 @@ class AppElevatedButton extends StatelessWidget {
             fontWeight: FontWeight.w700,
           ),
         ),
-        foregroundColor: WidgetStateColor.resolveWith((states) {
+        foregroundColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.disabled)) {
-            return t.lightGray;
+            return theme.lightGray;
           }
           return Colors.white;
         }),
@@ -57,9 +62,12 @@ class AppElevatedButton extends StatelessWidget {
             const SizedBox(
               width: 24,
             ),
-          Expanded(
+          Flexible(
             child: Center(
-              child: Text(label),
+              child: Text(
+                label,
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
           if (iconPath != null)

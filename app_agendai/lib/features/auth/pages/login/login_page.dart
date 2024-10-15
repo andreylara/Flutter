@@ -13,7 +13,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({super.key, required this.redirectTo});
+
+  final String? redirectTo;
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -45,6 +47,7 @@ class _LoginPageState extends State<LoginPage> implements LoginPageActions {
               ),
               const SizedBox(height: 24),
               AppTextField(
+                id: 'e-mail',
                 title: 'E-mail',
                 hint: 'Informe seu e-mail',
                 textInputType: TextInputType.emailAddress,
@@ -57,6 +60,7 @@ class _LoginPageState extends State<LoginPage> implements LoginPageActions {
               ),
               const SizedBox(height: 24),
               AppTextField(
+                id: 'senha',
                 title: 'Senha',
                 hint: 'Informe uma senha forte',
                 obscure: true,
@@ -68,6 +72,7 @@ class _LoginPageState extends State<LoginPage> implements LoginPageActions {
               ),
               const SizedBox(height: 24),
               AppElevatedButton(
+                id: 'entrar',
                 label: 'Entrar',
                 onPressed: state.isValid
                     ? () {
@@ -85,6 +90,10 @@ class _LoginPageState extends State<LoginPage> implements LoginPageActions {
 
   @override
   void navToHome() {
-    context.go(AppRoutes.home);
+    if (widget.redirectTo != null) {
+      context.go(widget.redirectTo!);
+    } else {
+      context.go(AppRoutes.home);
+    }
   }
 }

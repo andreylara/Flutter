@@ -55,7 +55,13 @@ dependencies:
   formz: ^0.6.0
   email_validator:
   loading_animation_widget: ^1.2.0+4
-
+  shimmer: ^3.0.0
+  intl:
+  flutter_localizations:
+    sdk: flutter
+  uuid:
+  collection:
+    
 dev_dependencies:
   bloc_test:
   flutter_test:

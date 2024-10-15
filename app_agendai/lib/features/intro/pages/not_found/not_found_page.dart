@@ -1,8 +1,8 @@
-import 'package:app_agendai/core/di/di.dart';
-import 'package:app_agendai/core/widgets/alert/alert_area_cubit.dart';
+import 'package:app_agendai/core/route/app_routes.dart';
 import 'package:app_agendai/core/widgets/app_text_button.dart';
 import 'package:app_agendai/features/intro/widgets/intro_base_page.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class NotFoundPage extends StatefulWidget {
   const NotFoundPage({super.key});
@@ -32,17 +32,7 @@ class NotFoundPageState extends State<NotFoundPage> {
               alignment: Alignment.centerLeft,
               child: AppTextButton(
                 label: 'Voltar',
-                onPressed: () {
-                  setState(() {
-                    getIt<AlertAreaCubit>().showAlert(
-                      Alert.success(title: 'Este é um alerta legal! $count'),
-                    );
-                    getIt<AlertAreaCubit>().showAlert(
-                      Alert.error(title: 'Este é um alerta legal! $count'),
-                    );
-                    count++;
-                  });
-                },
+                onPressed: () => context.go(AppRoutes.home),
               ),
             ),
           )

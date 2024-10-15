@@ -49,6 +49,7 @@ class _SignUpPageState extends State<SignUpPage> implements SignUpActions {
               ),
               const SizedBox(height: 32),
               AppTextField(
+                id: 'nome-completo',
                 title: 'Nome Completo',
                 hint: 'Informe seu Nome Comple',
                 textInputType: TextInputType.name,
@@ -62,6 +63,7 @@ class _SignUpPageState extends State<SignUpPage> implements SignUpActions {
               ),
               const SizedBox(height: 24),
               AppTextField(
+                id: 'cpf',
                 title: 'CPF',
                 hint: 'Informe seu CPF',
                 textInputType: TextInputType.number,
@@ -78,6 +80,7 @@ class _SignUpPageState extends State<SignUpPage> implements SignUpActions {
               ),
               const SizedBox(height: 24),
               AppTextField(
+                id: 'celular',
                 title: 'Celular',
                 hint: 'Informe seu número de celular',
                 textInputType: TextInputType.phone,
@@ -94,6 +97,7 @@ class _SignUpPageState extends State<SignUpPage> implements SignUpActions {
               ),
               const SizedBox(height: 24),
               AppTextField(
+                id: 'e-mail',
                 title: 'E-mail',
                 hint: 'Informe seu e-mail',
                 textInputType: TextInputType.emailAddress,
@@ -106,6 +110,7 @@ class _SignUpPageState extends State<SignUpPage> implements SignUpActions {
               ),
               const SizedBox(height: 24),
               AppTextField(
+                id: 'senha',
                 title: 'Senha',
                 hint: 'Informe uma senha forte',
                 obscure: true,
@@ -118,6 +123,7 @@ class _SignUpPageState extends State<SignUpPage> implements SignUpActions {
               ),
               const SizedBox(height: 24),
               AppElevatedButton(
+                id: 'entrar',
                 label: 'Cadastrar',
                 onPressed: state.isValid
                     ? () {

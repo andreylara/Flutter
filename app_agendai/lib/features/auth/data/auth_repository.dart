@@ -4,6 +4,7 @@ import 'package:app_agendai/features/auth/data/auth_datasource.dart';
 import 'package:app_agendai/features/auth/data/results/login_failed.dart';
 import 'package:app_agendai/features/auth/data/results/sign_up_failed.dart';
 import 'package:app_agendai/features/auth/data/results/validate_token_failed.dart';
+import 'package:app_agendai/features/auth/models/device.dart';
 import 'package:app_agendai/features/auth/models/sign_up_dto.dart';
 import 'package:app_agendai/features/auth/models/user.dart';
 
@@ -41,5 +42,9 @@ class AuthRepository {
   Future<void> logout() {
     // TODO: CHAMAR B4A PARA INVALIDAR SESSÃO
     return _appSecureStorage.deleteSessionToken();
+  }
+
+  Future<bool> registerDevice(Device device) {
+    return _datasource.registerDevice(device);
   }
 }

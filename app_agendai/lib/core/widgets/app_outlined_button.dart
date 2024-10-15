@@ -1,26 +1,33 @@
 import 'package:app_agendai/core/theme/app_theme.dart';
+import 'package:app_agendai/core/widgets/base/app_stateless.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class AppOutlinedButton extends StatelessWidget {
+class AppOutlinedButton extends AppStateless {
   const AppOutlinedButton({
     super.key,
     required this.label,
     required this.onPressed,
     this.iconPath,
+    this.minHeight,
+    required this.id,
   });
 
+  final String id;
   final String label;
   final VoidCallback? onPressed;
   final String? iconPath;
+  final double? minHeight;
 
   @override
-  Widget build(BuildContext context) {
-    final AppTheme t = context.watch();
-
+  Widget builder(BuildContext context, AppTheme theme) {
     return OutlinedButton(
-      onPressed: onPressed,
+      onPressed: onPressed != null
+          ? () {
+              onPressed!.call();
+              analytics.logButtonPressed(id);
+            }
+          : null,
       style: ButtonStyle(
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
@@ -29,11 +36,11 @@ class AppOutlinedButton extends StatelessWidget {
         ),
         side: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.disabled)) {
-            return BorderSide(color: t.lightGray);
+            return BorderSide(color: theme.lightGray);
           }
-          return BorderSide(color: t.primary);
+          return BorderSide(color: theme.primary);
         }),
-        minimumSize: WidgetStateProperty.all(const Size(128, 64)),
+        minimumSize: WidgetStateProperty.all(Size(128, minHeight ?? 64)),
         textStyle: WidgetStateProperty.all(
           const TextStyle(
             fontSize: 15,
@@ -42,9 +49,9 @@ class AppOutlinedButton extends StatelessWidget {
         ),
         foregroundColor: WidgetStateColor.resolveWith((states) {
           if (states.contains(WidgetState.disabled)) {
-            return t.lightGray;
+            return theme.lightGray;
           }
-          return t.primary;
+          return theme.primary;
         }),
         elevation: WidgetStateProperty.all(0),
         padding: WidgetStateProperty.all(
@@ -57,10 +64,8 @@ class AppOutlinedButton extends StatelessWidget {
             const SizedBox(
               width: 24,
             ),
-          Expanded(
-            child: Center(
-              child: Text(label),
-            ),
+          Center(
+            child: Text(label),
           ),
           if (iconPath != null)
             SvgPicture.asset(

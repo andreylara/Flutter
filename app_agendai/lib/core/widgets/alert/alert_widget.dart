@@ -58,31 +58,58 @@ class _AlertWidgetState extends State<AlertWidget>
           opacity: opacityAnimation.value,
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(9),
-              color: switch (widget.alert.type) {
-                AlertType.error => t.error,
-                AlertType.success => t.success,
-              },
-            ),
+                borderRadius: BorderRadius.circular(9),
+                color: switch (widget.alert.type) {
+                  AlertType.error => t.error,
+                  AlertType.success => t.success,
+                  AlertType.notification => Colors.white,
+                },
+                boxShadow: [
+                  BoxShadow(
+                    offset: const Offset(6, 14),
+                    blurRadius: 15,
+                    spreadRadius: 0,
+                    color: t.black.withOpacity(0.08),
+                  )
+                ]),
             padding: const EdgeInsets.all(24),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    widget.alert.title,
+            child: InkWell(
+              onTap: () {
+                widget.alert.onPressed?.call();
+                getIt<AlertAreaCubit>().removeAlert(widget.alert);
+              },
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.alert.title,
+                          style: t.body16Bold,
+                        ),
+                        if (widget.alert.subtitle != null)
+                          Text(
+                            widget.alert.subtitle!,
+                            style: t.body13,
+                          )
+                      ],
+                    ),
                   ),
-                ),
-                Icon(
-                  switch (widget.alert.type) {
-                    AlertType.error => Icons.cancel_outlined,
-                    AlertType.success => Icons.check_circle_outline_outlined,
-                  },
-                  color: switch (widget.alert.type) {
-                    AlertType.error => t.red,
-                    AlertType.success => t.secondary,
-                  },
-                )
-              ],
+                  Icon(
+                    switch (widget.alert.type) {
+                      AlertType.error => Icons.cancel_outlined,
+                      AlertType.success => Icons.check_circle_outline_outlined,
+                      AlertType.notification => Icons.notifications,
+                    },
+                    color: switch (widget.alert.type) {
+                      AlertType.error => t.red,
+                      AlertType.success => t.secondary,
+                      AlertType.notification => t.black,
+                    },
+                  )
+                ],
+              ),
             ),
           ),
         );

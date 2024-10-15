@@ -1,4 +1,5 @@
 import 'package:app_agendai/core/di/di.dart';
+import 'package:app_agendai/core/firebase/messaging/app_messaging.dart';
 import 'package:app_agendai/core/flavor/flavor_config.dart';
 import 'package:app_agendai/core/route/app_routes.dart';
 import 'package:app_agendai/core/theme/app_theme.dart';
@@ -10,6 +11,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'firebase_options.dart';
 
 Future<void> bootstrap(FlavorConfig config) async {
@@ -20,6 +22,8 @@ Future<void> bootstrap(FlavorConfig config) async {
   );
 
   await configureDependencies(config);
+
+  getIt<AppMessaging>().configure();
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -51,7 +55,14 @@ class _AppState extends State<App> {
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
           routerConfig: router,
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [Locale('pt', 'BR')],
           theme: ThemeData.light().copyWith(
+            scaffoldBackgroundColor: t.bg,
             colorScheme: ThemeData.light().colorScheme.copyWith(
                   surface: Colors.white,
                 ),

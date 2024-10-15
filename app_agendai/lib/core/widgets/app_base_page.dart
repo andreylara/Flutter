@@ -1,11 +1,14 @@
 import 'dart:ui';
 
 import 'package:app_agendai/core/theme/app_theme.dart';
+import 'package:app_agendai/core/widgets/app_card.dart';
 import 'package:app_agendai/core/widgets/app_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+
+enum AppBasePageType { fixed, scroll }
 
 class AppBasePage extends StatefulWidget {
   const AppBasePage({
@@ -14,12 +17,18 @@ class AppBasePage extends StatefulWidget {
     required this.body,
     this.bodyPadding = const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
     this.isLoading = false,
+    this.type = AppBasePageType.scroll,
+    this.bottomAction,
+    this.backgroundColor,
   });
 
   final String title;
   final Widget body;
   final EdgeInsets bodyPadding;
   final bool isLoading;
+  final AppBasePageType type;
+  final Widget? bottomAction;
+  final Color? backgroundColor;
 
   @override
   State<AppBasePage> createState() => _AppBasePageState();
@@ -57,22 +66,22 @@ class _AppBasePageState extends State<AppBasePage>
     final AppTheme t = context.watch();
 
     return Scaffold(
+      backgroundColor: widget.backgroundColor,
       body: GestureDetector(
         onTap: FocusScope.of(context).unfocus,
         child: Stack(
           children: [
-            SingleChildScrollView(
-              padding: EdgeInsets.only(
-                top: MediaQuery.paddingOf(context).top +
-                    64 +
-                    widget.bodyPadding.top,
-                bottom: MediaQuery.paddingOf(context).bottom +
-                    widget.bodyPadding.bottom,
-                left: widget.bodyPadding.left,
-                right: widget.bodyPadding.right,
-              ),
-              child: widget.body,
-            ),
+            if (widget.type == AppBasePageType.scroll)
+              SingleChildScrollView(
+                padding: EdgeInsets.only(
+                  top: MediaQuery.paddingOf(context).top + 52,
+                  bottom: MediaQuery.paddingOf(context).bottom +
+                      (widget.bottomAction != null ? 88 : 0),
+                ).add(widget.bodyPadding),
+                child: widget.body,
+              )
+            else
+              widget.body,
             Positioned.fill(
               child: AbsorbPointer(
                 absorbing: widget.isLoading,
@@ -99,15 +108,11 @@ class _AppBasePageState extends State<AppBasePage>
             ),
             Align(
               alignment: Alignment.topCenter,
-              child: Card(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(
-                    bottom: Radius.circular(36),
-                  ),
+              child: AppCard(
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(36),
                 ),
-                margin: EdgeInsets.zero,
-                elevation: 4,
-                shadowColor: t.lightGray,
+                padding: EdgeInsets.zero,
                 child: SafeArea(
                   bottom: false,
                   child: Padding(
@@ -117,6 +122,7 @@ class _AppBasePageState extends State<AppBasePage>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         AppIconButton(
+                          id: 'voltar',
                           iconPath: 'assets/icons/chevron_left.svg',
                           onPressed: context.pop,
                         ),
@@ -133,7 +139,29 @@ class _AppBasePageState extends State<AppBasePage>
                   ),
                 ),
               ),
-            )
+            ),
+            if (widget.bottomAction != null)
+              Positioned(
+                bottom: 0,
+                right: 0,
+                left: 0,
+                child: Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.white.withOpacity(0.2),
+                        Colors.white.withOpacity(0.8),
+                        Colors.white.withOpacity(0.8),
+                      ],
+                      stops: const [0, 0.1, 1],
+                    ),
+                  ),
+                  child: widget.bottomAction,
+                ),
+              )
           ],
         ),
       ),

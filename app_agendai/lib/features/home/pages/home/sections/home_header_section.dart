@@ -18,7 +18,15 @@ class HomeHeaderSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             IconButton(
-              onPressed: context.read<SessionCubit>().logout,
+              onPressed: () {
+                final sessionCubit = context.read<SessionCubit>();
+                if (sessionCubit.state.loggedUser != null) {
+                  sessionCubit.logout();
+                } else {
+                  sessionCubit.login(
+                      email: 'andreydelara@hotmail.com', password: 'andrey123');
+                }
+              },
               color: t.black,
               icon: const Icon(Icons.menu),
             ),

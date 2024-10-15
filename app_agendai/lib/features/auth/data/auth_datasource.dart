@@ -2,9 +2,11 @@ import 'package:app_agendai/core/helpers/result.dart';
 import 'package:app_agendai/features/auth/data/results/login_failed.dart';
 import 'package:app_agendai/features/auth/data/results/sign_up_failed.dart';
 import 'package:app_agendai/features/auth/data/results/validate_token_failed.dart';
+import 'package:app_agendai/features/auth/models/device.dart';
 import 'package:app_agendai/features/auth/models/sign_up_dto.dart';
 import 'package:app_agendai/features/auth/models/user.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 abstract class AuthDatasource {
   Future<Result<LoginFailed, User>> login(
@@ -13,6 +15,8 @@ abstract class AuthDatasource {
   Future<Result<ValidateTokenFailed, User>> validateToken(String token);
 
   Future<Result<SignUpFailed, User>> signUp(SignUpDto signUpDto);
+
+  Future<bool> registerDevice(Device device);
 }
 
 class RemoteAuthDatasource implements AuthDatasource {
@@ -70,6 +74,17 @@ class RemoteAuthDatasource implements AuthDatasource {
       return const Failure(ValidateTokenFailed.invalidToken);
     } catch (_) {
       return const Failure(ValidateTokenFailed.unknownError);
+    }
+  }
+
+  @override
+  Future<bool> registerDevice(Device device) async {
+    try {
+      await _dio.post('/register-device', data: device.toJson());
+      return true;
+    } catch (e) {
+      debugPrint('$e');
+      return false;
     }
   }
 }
